@@ -1,0 +1,1578 @@
+/* =====================================================================
+   AEREOSUR STYLESHEET
+   Core Design System: Modern Aviation Dashboard / Glassmorphism Dark
+   ===================================================================== */
+
+:root {
+    /* Color Palette */
+    --bg-base: #0b0f19;
+    --bg-card: rgba(30, 41, 59, 0.45);
+    --bg-card-hover: rgba(30, 41, 59, 0.65);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-color-active: rgba(14, 165, 233, 0.4);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    --primary: #0ea5e9;
+    --primary-glow: rgba(14, 165, 233, 0.25);
+    --primary-hover: #38bdf8;
+
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.15);
+
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.15);
+
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.15);
+
+    --font-main: 'Plus Jakarta Sans', sans-serif;
+
+    /* Transitions & Shadows */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-blur: blur(12px);
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+body {
+    background-color: var(--bg-base);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Layout Structure */
+.app-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: var(--glass-blur);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--primary);
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
+.brand-text h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-text span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.nav-item i {
+    width: 20px;
+    height: 20px;
+}
+
+.nav-item:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+    color: var(--text-primary);
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid var(--border-color-active);
+    box-shadow: 0 0 16px var(--primary-glow);
+}
+
+.sidebar-footer {
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+.dot.active {
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* Header */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.header-title p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transition-smooth);
+}
+
+.btn:disabled,
+.btn[disabled],
+.btn.disabled-action {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    pointer-events: auto !important;
+    filter: grayscale(0.6);
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.lock-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    opacity: 0.55;
+    padding: 4px;
+    cursor: help;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 0 16px var(--primary-glow);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+    background: var(--danger-bg);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Stats Cards Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.stat-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon-wrapper i {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-icon-wrapper.blue {
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--primary);
+}
+
+.stat-icon-wrapper.green {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+}
+
+.stat-icon-wrapper.purple {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.stat-icon-wrapper.orange {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Card layout wrapper */
+.card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.card-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.card-header .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Workspace Layout */
+.workspace-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 32px;
+    align-items: start;
+    flex-grow: 1;
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+    width: 180px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+}
+
+.search-box input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px 6px 30px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    transition: var(--transition-smooth);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Flights List */
+.flights-list {
+    max-height: 520px;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.flight-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.flight-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.flight-item.selected {
+    background: rgba(14, 165, 233, 0.08);
+    border-color: var(--border-color-active);
+    box-shadow: inset 0 0 12px rgba(14, 165, 233, 0.1);
+}
+
+.flight-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.flight-number-badge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.airline-tag {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.badge-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.flight-item-route {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.route-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.route-arrow {
+    color: var(--text-muted);
+}
+
+.flight-item-time {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Empty/Loading States */
+.empty-state,
+.loading-state {
+    padding: 60px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    width: 48px;
+    height: 48px;
+    stroke-width: 1.5;
+}
+
+.empty-state h3 {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.05);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Flight Details view */
+.details-section {
+    min-height: 520px;
+}
+
+.flight-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Info Banner */
+.flight-info-banner {
+    padding: 24px;
+    background: radial-gradient(100% 100% at 0% 0%, rgba(14, 165, 233, 0.15) 0%, rgba(30, 41, 59, 0.4) 100%);
+    border: 1px solid var(--border-color-active);
+    position: relative;
+    overflow: hidden;
+}
+
+.flight-info-banner::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.banner-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#btn-export-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.4);
+    color: #38bdf8;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+#btn-export-pdf:hover {
+    background: rgba(14, 165, 233, 0.3);
+    border-color: #38bdf8;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
+}
+
+#btn-export-pdf i {
+    width: 16px;
+    height: 16px;
+}
+
+.flight-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(14, 165, 233, 0.2);
+    border: 1px solid var(--border-color-active);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.flight-badge i {
+    width: 16px;
+    height: 16px;
+    color: var(--primary);
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-badge.scheduled {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.status-badge.active {
+    background: rgba(245, 158, 11, 0.18);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    animation: flightPulse 2s infinite ease-in-out;
+}
+
+.status-badge.arrived {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+@keyframes flightPulse {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+/* Route Display */
+.route-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    margin-bottom: 24px;
+}
+
+.route-node {
+    display: flex;
+    flex-direction: column;
+}
+
+.route-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.city-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.route-connector {
+    flex-grow: 1;
+    margin: 0 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.route-connector .line {
+    width: 100%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 12px);
+}
+
+.route-connector .plane-icon {
+    position: absolute;
+    color: var(--primary);
+    background: var(--bg-base);
+    padding: 4px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+}
+
+.banner-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item .label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.detail-item .value {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Detail Workspace Grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+}
+
+/* Tabs & List */
+.lists-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tabs-header {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-secondary);
+    padding: 14px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-smooth);
+}
+
+.tab-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.tab-content.active {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.list-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-actions h4 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Tables */
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 16px;
+}
+
+.data-table th {
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table td {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover td {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.btn-delete-row {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: inline-flex;
+    transition: var(--transition-smooth);
+}
+
+.btn-delete-row:hover {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-delete-row i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Cabin Seat Map Visualizer */
+.seat-map-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.seat-map-wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    padding: 24px 10px;
+    background: rgba(0, 0, 0, 0.15);
+    min-height: 380px;
+}
+
+.airplane-cabin {
+    width: 220px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px solid var(--border-color);
+    border-radius: 40px 40px 16px 16px;
+    position: relative;
+    padding: 48px 16px 20px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cabin-nose {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    height: 50px;
+    background: var(--bg-base);
+    border: 2px solid var(--border-color);
+    border-bottom: none;
+    border-radius: 40px 40px 0 0;
+    pointer-events: none;
+}
+
+.cabin-nose::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.cabin-exit-label {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 10px 0 6px 0;
+    border-top: 1px dashed var(--border-color);
+    border-bottom: 1px dashed var(--border-color);
+    padding: 2px 0;
+}
+
+.seats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Row of seats */
+.seat-row {
+    display: grid;
+    grid-template-columns: 24px 20px 20px 16px 20px 20px;
+    align-items: center;
+    gap: 4px;
+}
+
+.row-num {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: center;
+}
+
+.seat-aisle {
+    height: 100%;
+}
+
+.seat {
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(14, 165, 233, 0.4);
+    background: rgba(14, 165, 233, 0.05);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--primary);
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.seat:hover {
+    background: rgba(14, 165, 233, 0.2);
+    border-color: var(--primary);
+}
+
+.seat.occupied {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.5);
+    color: var(--warning);
+    cursor: not-allowed;
+}
+
+.seat.occupied:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+.seat.selected {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.seat-map-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+}
+
+.seat-sample {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.seat-sample.available {
+    border: 1px solid rgba(14, 165, 233, 0.5);
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.seat-sample.occupied {
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.2);
+}
+
+.seat-sample.selected {
+    background: var(--primary);
+}
+
+/* Modales */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-card {
+    background: #0f172a;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 520px;
+    max-width: 90%;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    animation: modalSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlide {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 i {
+    color: var(--primary);
+    width: 20px;
+    height: 20px;
+}
+
+.btn-close-modal {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-close-modal:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.form-group input[readonly] {
+    background: rgba(0, 0, 0, 0.2);
+    border-style: dashed;
+    cursor: not-allowed;
+}
+
+.input-tip {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Toast Notification */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1001;
+}
+
+.toast {
+    background: #1e293b;
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 16px 20px;
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    max-width: 400px;
+    animation: toastSlide 0.3s ease, fadeOut 0.5s ease 4.5s forwards;
+}
+
+.toast.success {
+    border-left-color: var(--success);
+}
+
+.toast.error {
+    border-left-color: var(--danger);
+}
+
+.toast.warning {
+    border-left-color: var(--warning);
+}
+
+@keyframes toastSlide {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+        visibility: hidden;
+    }
+}
+
+/* Helper Utilities */
+.hide {
+    display: none !important;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .workspace-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .seat-map-container {
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 24px;
+    }
+
+    .brand {
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+}
+
+/* =====================================================================
+   ESTILOS FORMATO MANIFIESTO PDF (CASO 4)
+   ===================================================================== */
+.modal-pdf-card {
+    width: 820px !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-pdf-body {
+    overflow-y: auto;
+    padding: 20px;
+    background: #1e293b;
+    display: flex;
+    justify-content: center;
+}
+
+.pdf-sheet {
+    border: 2px solid #000;
+    border-radius: 4px;
+    padding: 28px 32px;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 740px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 12px;
+}
+
+.pdf-logo {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Times New Roman', Georgia, serif;
+    letter-spacing: -0.5px;
+    color: #000;
+    margin: 0;
+}
+
+.pdf-flight-num {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+}
+
+.pdf-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.pdf-meta .split {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.underlined {
+    text-decoration: underline;
+    font-weight: 600;
+    padding-left: 4px;
+}
+
+.pdf-section-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin: 16px 0 8px 0;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 16px;
+    color: #000;
+}
+
+.pdf-table th,
+.pdf-table td {
+    border: 1px solid #333;
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.pdf-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #000;
+}
+
+.pdf-table td {
+    background-color: #fff;
+    color: #000;
+}
+
+/* =====================================================================
+   REGLAS DE IMPRESIÓN (NATIVE PRINT TO PDF)
+   ===================================================================== */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    #modal-pdf,
+    #modal-pdf * {
+        visibility: visible !important;
+    }
+
+    #modal-pdf {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: transparent !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .modal-pdf-card {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .modal-header,
+    .modal-footer {
+        display: none !important;
+    }
+
+    .modal-pdf-body {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    #pdf-render-area {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+    }
+}
+
+/* =====================================================================
+   MÁXIMA NITIDEZ Y TEXTO NEGRO PURO PARA EL PDF
+   ===================================================================== */
+.pdf-sheet,
+.pdf-sheet * {
+    color: #000000 !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+.pdf-sheet {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.pdf-logo {
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+.pdf-flight-num {
+    color: #000000 !important;
+    font-weight: 700 !important;
+}
+
+.pdf-meta * {
+    color: #000000 !important;
+}
+
+.underlined {
+    color: #000000 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+}
+
+.pdf-section-title {
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+.pdf-table {
+    border: 1.5px solid #000000 !important;
+}
+
+.pdf-table th {
+    background-color: #e5e7eb !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+    border: 1.5px solid #000000 !important;
+}
+
+.pdf-table td {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-weight: 600 !important;
+    border: 1px solid #000000 !important;
+}

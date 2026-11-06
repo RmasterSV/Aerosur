@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AereoSur - Gestión de Vuelos</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Librería html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=5">
+    <!-- App JavaScript -->
+    <script src="app.js?v=5" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i data-lucide="plane-takeoff" class="brand-icon"></i>
+                <div class="brand-text">
+                    <h1>AereoSur</h1>
+                    <span>Terminal de Control</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="btn-nav-flights">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard Vuelos</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="dot active"></span>
+                    <span>Sistema Operativo</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h2>Panel General de Vuelos</h2>
+                    <p>Monitoreo y administración de despegues, tripulaciones y pasajeros</p>
+                </div>
+                <button class="btn btn-primary btn-icon" id="btn-open-flight-modal">
+                    <i data-lucide="plus"></i>
+                    <span>Registrar Vuelo</span>
+                </button>
+            </header>
+
+            <!-- Dashboard Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper blue">
+                        <i data-lucide="plane"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Vuelos</span>
+                        <h3 class="stat-value" id="stat-total-flights">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper green">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Pasajeros Totales</span>
+                        <h3 class="stat-value" id="stat-total-passengers">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper purple">
+                        <i data-lucide="user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Tripulación Activa</span>
+                        <h3 class="stat-value" id="stat-total-crew">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper orange">
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Destinos</span>
+                        <h3 class="stat-value" id="stat-total-destinations">0</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workspace Layout -->
+            <div class="workspace-grid">
+                <!-- Flights List Section -->
+                <section class="flights-section card">
+                    <div class="card-header">
+                        <h3>Vuelos Activos</h3>
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="flight-search" placeholder="Buscar vuelo u origen...">
+                        </div>
+                    </div>
+                    <div class="flights-list" id="flights-list-container">
+                        <!-- Loaded dynamically -->
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Cargando vuelos...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Detailed View Section -->
+                <section class="details-section" id="details-section-container">
+                    <!-- Default State -->
+                    <div class="empty-state" id="details-empty-state">
+                        <i data-lucide="mouse-pointer-click"></i>
+                        <h3>Selecciona un Vuelo</h3>
+                        <p>Haz clic en un vuelo de la lista para gestionar sus tripulantes, pasajeros y mapa de
+                            asientos.</p>
+                    </div>
+
+                    <!-- Flight Details (Hidden by default) -->
+                    <div class="flight-details-wrapper hide" id="flight-details-content">
+                        <!-- Flight Header Info -->
+                        <div class="flight-info-banner card">
+                            <div class="banner-top">
+                                <div class="flight-badge">
+                                    <i data-lucide="tag"></i>
+                                    <span id="detail-flight-number">---</span>
+                                </div>
+                                <div class="banner-actions">
+                                    <button class="btn btn-secondary btn-sm" id="btn-export-pdf"
+                                        title="Descargar Manifiesto PDF">
+                                        <i data-lucide="file-text"></i>
+                                        <span>Descargar PDF</span>
+                                    </button>
+                                    <span class="status-badge" id="detail-flight-status">---</span>
+                                </div>
+                            </div>
+                            <div class="route-display">
+                                <div class="route-node">
+                                    <span class="route-label">ORIGEN</span>
+                                    <span class="city-name" id="detail-origin-name">---</span>
+                                </div>
+                                <div class="route-connector">
+                                    <div class="line"></div>
+                                    <i data-lucide="plane" class="plane-icon"></i>
+                                </div>
+                                <div class="route-node text-right">
+                                    <span class="route-label">DESTINO</span>
+                                    <span class="city-name" id="detail-dest-name">---</span>
+                                </div>
+                            </div>
+                            <div class="banner-details">
+                                <div class="detail-item">
+                                    <span class="label">Línea Aérea</span>
+                                    <span class="value" id="detail-airline">---</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Salida</span>
+                                    <span class="value" id="detail-departure">---</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Llegada</span>
+                                    <span class="value" id="detail-arrival">---</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seat Map and Forms -->
+                        <div class="details-grid">
+                            <!-- Left: Tabs for lists -->
+                            <div class="lists-container card">
+                                <div class="tabs-header">
+                                    <button class="tab-btn active" data-tab="crew">
+                                        <i data-lucide="user-check"></i>
+                                        <span>Tripulación</span>
+                                    </button>
+                                    <button class="tab-btn" data-tab="passengers">
+                                        <i data-lucide="users"></i>
+                                        <span>Pasajeros</span>
+                                    </button>
+                                </div>
+
+                                <div class="tab-content active" id="tab-crew">
+                                    <div class="list-actions">
+                                        <h4>Miembros de Tripulación <span class="badge-count" id="crew-count-badge">(0/8)</span></h4>
+                                        <button class="btn btn-secondary btn-sm" id="btn-add-crew">
+                                            <i data-lucide="plus"></i> Agregar
+                                        </button>
+                                    </div>
+                                    <div class="table-wrapper">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pasaporte</th>
+                                                    <th>Nombre</th>
+                                                    <th>Nacionalidad</th>
+                                                    <th>Puesto</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="crew-table-body">
+                                                <!-- Dynamic rows -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content" id="tab-passengers">
+                                    <div class="list-actions">
+                                        <h4>Pasajeros a Bordo <span class="badge-count" id="passenger-count-badge">(0/30)</span></h4>
+                                        <button class="btn btn-secondary btn-sm" id="btn-add-passenger">
+                                            <i data-lucide="plus"></i> Agregar
+                                        </button>
+                                    </div>
+                                    <div class="table-wrapper">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pasaporte</th>
+                                                    <th>Nombre</th>
+                                                    <th>Nacionalidad</th>
+                                                    <th>Asiento</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="passenger-table-body">
+                                                <!-- Dynamic rows -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Cabin Visual Seat Map -->
+                            <div class="seat-map-container card">
+                                <div class="card-header">
+                                    <h3>Disposición de Cabina</h3>
+                                    <span class="subtitle">Asientos del Avión</span>
+                                </div>
+                                <div class="seat-map-wrapper">
+                                    <div class="airplane-cabin">
+                                        <div class="cabin-nose"></div>
+                                        <div class="cabin-body">
+                                            <!-- Row numbers & seat grids generated dynamically -->
+                                            <div class="cabin-exit-label">Salidas de Emergencia</div>
+                                            <div class="seats-grid" id="cabin-seats-grid">
+                                                <!-- Filled dynamically in app.js -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="seat-map-legend">
+                                    <div class="legend-item"><span class="seat-sample available"></span>Disponible</div>
+                                    <div class="legend-item"><span class="seat-sample occupied"></span>Pasajero</div>
+                                    <div class="legend-item"><span class="seat-sample selected"></span>Seleccionado
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- =====================================================================
+         MODALES / POPUPS
+         ===================================================================== -->
+
+    <!-- Flight Modal -->
+    <div class="modal-overlay hide" id="modal-flight">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i data-lucide="plane-takeoff"></i> Registrar Nuevo Vuelo</h3>
+                <button class="btn-close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-new-flight">
+                <div class="modal-body">
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="flight_number">Número de Vuelo</label>
+                            <input type="text" id="flight_number" name="flight_number" placeholder="Ej: 200130012"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="airline">Línea Aérea</label>
+                            <input type="text" id="airline" name="airline" placeholder="Ej: Aerovías" required>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="origin">País de Origen</label>
+                            <input type="text" id="origin" name="origin" placeholder="Ej: Guatemala" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">País de Destino</label>
+                            <input type="text" id="destination" name="destination" placeholder="Ej: España" required>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="departure_time">Fecha y Hora de Salida</label>
+                            <input type="datetime-local" id="departure_time" name="departure_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival_time">Fecha y Hora de Ingreso (Destino)</label>
+                            <input type="datetime-local" id="arrival_time" name="arrival_time" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Vuelo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Crew Modal -->
+    <div class="modal-overlay hide" id="modal-crew">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i data-lucide="user-plus"></i> Agregar Tripulante</h3>
+                <button class="btn-close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-new-crew">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="crew_name">Nombre Completo</label>
+                        <input type="text" id="crew_name" name="name" placeholder="Ej: Julio Juárez" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="crew_passport">Pasaporte / Identificación</label>
+                        <input type="text" id="crew_passport" name="passport" placeholder="Ej: 3912022" required>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="crew_nationality">Nacionalidad</label>
+                            <input type="text" id="crew_nationality" name="nationality" placeholder="Ej: Guatemalteca"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="crew_role">Puesto / Rol</label>
+                            <select id="crew_role" name="role" required>
+                                <option value="" disabled selected>Selecciona puesto...</option>
+                                <option value="Capitán">Capitán (Máx. 1)</option>
+                                <option value="Primer Oficial">Primer Oficial (Máx. 1)</option>
+                                <option value="Segundo Oficial">Segundo Oficial (Máx. 1)</option>
+                                <option value="Azafata">Azafata (Máx. 4)</option>
+                                <option value="Comisario de Bordo">Comisario de Bordo (Máx. 1)</option>
+                            </select>
+                            <span class="input-tip" id="crew-role-tip">Solo se permite 1 Capitán por vuelo.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Agregar Tripulante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Passenger Modal -->
+    <div class="modal-overlay hide" id="modal-passenger">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i data-lucide="user-plus"></i> Registrar Pasajero</h3>
+                <button class="btn-close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-new-passenger">
+                <div class="modal-body">
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="pass_first_name">Nombres</label>
+                            <input type="text" id="pass_first_name" name="first_name"
+                                placeholder="Ej: María del Rosario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass_last_name">Apellidos</label>
+                            <input type="text" id="pass_last_name" name="last_name" placeholder="Ej: Álvarez" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass_passport">Pasaporte</label>
+                        <input type="text" id="pass_passport" name="passport" placeholder="Ej: 918273" required>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="pass_nationality">Nacionalidad</label>
+                            <input type="text" id="pass_nationality" name="nationality" placeholder="Ej: Guatemalteca"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass_seat">Asiento</label>
+                            <input type="text" id="pass_seat" name="seat" placeholder="Ej: 24 (O haz clic en el mapa)"
+                                required readonly>
+                            <span class="input-tip">Selecciona un asiento disponible en el mapa de cabina.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar Pasajero</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Vista Previa y Descarga de Manifiesto PDF (Caso 4) -->
+    <div class="modal-overlay hide" id="modal-pdf">
+        <div class="modal-card modal-pdf-card">
+            <div class="modal-header">
+                <h3><i data-lucide="file-text"></i> Manifiesto de Vuelo (Caso 4)</h3>
+                <div class="modal-header-actions">
+                    <button class="btn btn-primary btn-sm" id="btn-do-download-pdf">
+                        <i data-lucide="download"></i> Descargar PDF
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="btn-print-pdf">
+                        <i data-lucide="printer"></i> Imprimir
+                    </button>
+                    <button class="btn-close-modal"><i data-lucide="x"></i></button>
+                </div>
+            </div>
+            <div class="modal-body modal-pdf-body">
+                <div id="pdf-render-area" class="pdf-sheet">
+                    <div class="pdf-header">
+                        <h1 class="pdf-logo">AereoSur</h1>
+                        <div class="pdf-flight-num">
+                            <span>No. Vuelo:</span> <span id="pdf-val-flight" class="underlined">---</span>
+                        </div>
+                    </div>
+
+                    <div class="pdf-meta">
+                        <div class="meta-row">
+                            <span>Línea Aérea:</span> <span id="pdf-val-airline" class="underlined">---</span>
+                        </div>
+                        <div class="meta-row split">
+                            <div><span>Origen:</span> <span id="pdf-val-origin" class="underlined">---</span></div>
+                            <div><span>Destino:</span> <span id="pdf-val-dest" class="underlined">---</span></div>
+                        </div>
+                        <div class="meta-row split">
+                            <div><span>Fecha y Hora Salida:</span> <span id="pdf-val-dep" class="underlined">---</span>
+                            </div>
+                            <div><span>Fecha y Hora Ingreso:</span> <span id="pdf-val-arr" class="underlined">---</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="pdf-section-title">TRIPULACIÓN</h3>
+                    <table class="pdf-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Pasaporte</th>
+                                <th style="width: 35%;">Nombre</th>
+                                <th style="width: 25%;">Nacionalidad</th>
+                                <th style="width: 20%;">Puesto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pdf-crew-body"></tbody>
+                    </table>
+
+                    <h3 class="pdf-section-title">PASAJEROS</h3>
+                    <table class="pdf-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Nombres</th>
+                                <th style="width: 25%;">Apellidos</th>
+                                <th style="width: 20%;">Nacionalidad</th>
+                                <th style="width: 12%;">Asiento</th>
+                                <th style="width: 18%;">Pasaporte</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pdf-pass-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-close-modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toast-container"></div>
+</body>
+
+</html>

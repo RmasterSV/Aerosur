@@ -1,0 +1,25 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Database temporary files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+Desktop.ini
