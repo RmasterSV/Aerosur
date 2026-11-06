@@ -80,6 +80,18 @@ El script verificará Python, instalará dependencias si es necesario y levantar
    http://localhost:8000
    ```
 
+### Opción 3: Despliegue en Render (En la nube)
+El proyecto incluye `render.yaml` preconfigurado para Render:
+1. Inicia sesión en [render.com](https://render.com) (con tu cuenta de GitHub).
+2. Haz clic en **New +** > **Web Service**.
+3. Selecciona tu repositorio **`Aerosur`**.
+4. Configuración del servicio:
+   - **Runtime:** `Python 3`
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+   - **Plan:** `Free`
+5. Haz clic en **Deploy Web Service** y obtendrás una URL pública `https://aerosur-xxxx.onrender.com` accesible desde cualquier dispositivo.
+
 ---
 
 ## 📂 Estructura del Proyecto
@@ -95,6 +107,7 @@ aereosur_app/
 │   ├── index.html        # Interfaz de usuario Single Page Application (SPA)
 │   ├── styles.css        # Estilos, temas oscuro y diseño responsivo
 │   └── app.js            # Lógica del cliente, llamadas API y mapa de cabina
+├── render.yaml           # Configuración de despliegue en Render
 ├── iniciar_servidor.bat  # Script ejecutable de un clic para Windows
 ├── requirements.txt      # Dependencias del proyecto
 └── run.py                # Punto de entrada y servidor Uvicorn
